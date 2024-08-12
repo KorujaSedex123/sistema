@@ -11,30 +11,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_recurso")
+@Getter
+@Setter
+@NoArgsConstructor
 public class RecursoEntity {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@Column(nullable = false)
 	private String chave;
-	
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-	
-	public RecursoEntity() {
-		
-	}
-	
+
 	public RecursoEntity(RecursoDTO recurso) {
 		BeanUtils.copyProperties(recurso, this);
 	}
@@ -50,31 +52,5 @@ public class RecursoEntity {
 		RecursoEntity other = (RecursoEntity) obj;
 		return Objects.equals(id, other.id);
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getChave() {
-		return chave;
-	}
-
-	public void setChave(String chave) {
-		this.chave = chave;
-	}
-	
-	
 
 }
