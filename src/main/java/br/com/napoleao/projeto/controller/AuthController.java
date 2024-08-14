@@ -22,12 +22,23 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
-	
-	
+
+	@Autowired
+	private UsuarioService usuarioService;
+
 	@PostMapping(value = "/login")
-	public ResponseEntity<?> login(@RequestBody AuthenticationDTO authDto){
+	public ResponseEntity<?> login(@RequestBody AuthenticationDTO authDto) {
 		return ResponseEntity.ok(authService.login(authDto));
 	}
-	
+
+	@PostMapping(value = "/signup")
+	public void inserirNovoUsuario(@RequestBody UsuarioDTO novoUsuario) {
+		usuarioService.insertNovoUsuario(novoUsuario);
+	}
+
+	@GetMapping(value = "/verificarCadastro/{uuid}")
+	public String verificarCadastro(@PathVariable("uuid") String uuid) {
+		return usuarioService.verificarCadastro(uuid);
+	}
 
 }

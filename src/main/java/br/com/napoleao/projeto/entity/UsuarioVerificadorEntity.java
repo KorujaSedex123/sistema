@@ -1,41 +1,41 @@
 package br.com.napoleao.projeto.entity;
 
-import org.springframework.beans.BeanUtils;
+import java.time.Instant;
+import java.util.UUID;
 
-import br.com.napoleao.projeto.dto.RecursoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@Table(name = "tb_recurso")
+@Table(name = "tb_usuario_verificador")
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@ToString
-public class RecursoEntity {
+public class UsuarioVerificadorEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
-	private String nome;
+	private UUID uuid;
 
 	@Column(nullable = false)
-	private String chave;
+	private Instant dataExpiracao;
 
-	public RecursoEntity(RecursoDTO recurso) {
-		BeanUtils.copyProperties(recurso, this);
-	}
+	@ManyToOne
+	@JoinColumn(name = "id_usuario", referencedColumnName = "id", unique = true)
+	private UsuarioEntity usuario;
 
 }
