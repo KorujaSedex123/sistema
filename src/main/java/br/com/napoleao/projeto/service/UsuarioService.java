@@ -57,10 +57,26 @@ public class UsuarioService {
 
 		usuarioVerificadorRepository.save(verificador);
 
-		// TODO - Enviar Email para verificar conta
+		
+		//TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
 
-		emailService.enviarEmailText(usuario.getEmail(), "Novo Usuario Cadastrado",
-				"Voce esta recebendo um email de cadastro, o numero para validacao e " + verificador.getUuid());
+		String assunto =  "<!DOCTYPE html>"
+			    + "<html lang='pt-BR'>"
+			    + "<head>"
+			    + "<meta charset='UTF-8'>"
+			    + "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+			    + "<title>Ativação de Conta</title>"
+			    + "</head>"
+			    + "<body>"
+			    + "<p>Olá,</p>"
+			    + "<p>Você está recebendo este email porque se cadastrou em nosso serviço. Para ativar sua conta, por favor, clique no link abaixo:</p>"
+			    + "<p><a href='http://localhost:8080/auth/verificarCadastro/" + verificador.getUuid() + "'>Clique aqui para ativar sua conta</a></p>"
+			    + "<p>Se você não se cadastrou em nosso serviço, por favor, ignore este email.</p>"
+			    + "<p>Obrigado,<br>"+ letraMais(usuario.getNome()) +"</p>"
+			    + "</body>"
+			    + "</html>";
+
+		emailService.enviarEmailText(usuario.getEmail(), "Novo Usuario Cadastrado", assunto);
 	}
 
 	public String verificarCadastro(String uuid) {
@@ -100,5 +116,13 @@ public class UsuarioService {
 	public UsuarioDTO buscarPorId(Long id) {
 		return new UsuarioDTO(usuarioRepository.findById(id).get());
 	}
+	
+	 public  String letraMais(String input) {
+	        if (input == null || input.isEmpty()) {
+	            return input;
+	        }
+	        String saida = input.substring(0, 1).toUpperCase() + input.substring(1);
+	        return saida;
+	    }
 
 }
