@@ -57,24 +57,16 @@ public class UsuarioService {
 
 		usuarioVerificadorRepository.save(verificador);
 
-		
-		//TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
+		// TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
 
-		String assunto =  "<!DOCTYPE html>"
-			    + "<html lang='pt-BR'>"
-			    + "<head>"
-			    + "<meta charset='UTF-8'>"
-			    + "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-			    + "<title>Ativação de Conta</title>"
-			    + "</head>"
-			    + "<body>"
-			    + "<p>Olá,</p>"
-			    + "<p>Você está recebendo este email porque se cadastrou em nosso serviço. Para ativar sua conta, por favor, clique no link abaixo:</p>"
-			    + "<p><a href='http://localhost:8080/auth/verificarCadastro/" + verificador.getUuid() + "'>Clique aqui para ativar sua conta</a></p>"
-			    + "<p>Se você não se cadastrou em nosso serviço, por favor, ignore este email.</p>"
-			    + "<p>Obrigado,<br>"+ letraMais(usuario.getNome()) +"</p>"
-			    + "</body>"
-			    + "</html>";
+		String assunto = "<!DOCTYPE html>" + "<html lang='pt-BR'>" + "<head>" + "<meta charset='UTF-8'>"
+				+ "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+				+ "<title>Ativação de Conta</title>" + "</head>" + "<body>" + "<p>Olá,</p>"
+				+ "<p>Você está recebendo este email porque se cadastrou em nosso serviço. Para ativar sua conta, por favor, clique no link abaixo:</p>"
+				+ "<p><a href='http://localhost:3000/auth/confirmuser?uuid=" + verificador.getUuid()
+				+ "'>Clique aqui para ativar sua conta</a></p>"
+				+ "<p>Se você não se cadastrou em nosso serviço, por favor, ignore este email.</p>" + "<p>Obrigado,<br>"
+				+ letraMais(usuario.getNome()) + "</p>" + "</body>" + "</html>";
 
 		emailService.enviarEmailText(usuario.getEmail(), "Novo Usuario Cadastrado", assunto);
 	}
@@ -89,6 +81,19 @@ public class UsuarioService {
 				u.setSituacao(TipoSituacaoUsuario.ATIVO);
 
 				usuarioRepository.save(u);
+
+				// TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
+
+				String assunto = "<!DOCTYPE html>" + "<html lang='pt-BR'>" + "<head>" + "<meta charset='UTF-8'>"
+						+ "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+						+ "<title>Conta Ativada</title>" + "</head>" + "<body>" + "<p>Olá,</p>"
+						+ "<p>Sua conta foi ativada com sucesso! Agora você pode acessar todos os recursos do nosso serviço.</p>"
+						+ "<p>Se você não ativou sua conta, por favor, entre em contato com nosso suporte.</p>"
+						+ "<p>Obrigado,<br>" + letraMais(usuarioVerificacao.getUsuario().getNome()) + "</p>" + "</body>"
+						+ "</html>";
+
+				emailService.enviarEmailText(usuarioVerificacao.getUsuario().getEmail(), "Novo Usuario Cadastrado",
+						assunto);
 
 				return "Usuario Verificado";
 			} else {
@@ -116,13 +121,13 @@ public class UsuarioService {
 	public UsuarioDTO buscarPorId(Long id) {
 		return new UsuarioDTO(usuarioRepository.findById(id).get());
 	}
-	
-	 public  String letraMais(String input) {
-	        if (input == null || input.isEmpty()) {
-	            return input;
-	        }
-	        String saida = input.substring(0, 1).toUpperCase() + input.substring(1);
-	        return saida;
-	    }
+
+	public String letraMais(String input) {
+		if (input == null || input.isEmpty()) {
+			return input;
+		}
+		String saida = input.substring(0, 1).toUpperCase() + input.substring(1);
+		return saida;
+	}
 
 }
