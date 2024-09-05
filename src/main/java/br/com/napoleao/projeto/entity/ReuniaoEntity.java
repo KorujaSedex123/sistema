@@ -28,10 +28,10 @@ public class ReuniaoEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column
+	@Column(nullable = false)
 	private String descricao;
 
-	@Column(name = "data_reuniao")
+	@Column(name = "data_reuniao", nullable = false)
 	private Date dataReuniao;
 
 	public ReuniaoEntity(ReuniaoDTO reuniao) {
