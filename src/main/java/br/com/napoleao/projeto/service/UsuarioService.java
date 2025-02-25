@@ -37,39 +37,61 @@ public class UsuarioService {
 
 	public void insert(UsuarioDTO usuario) {
 		UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
+		if(usuarioEntity.getSituacao().equals(null)) {
+			usuarioEntity.setSituacao(TipoSituacaoUsuario.PENDENTE);
+		}
 		usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
 		usuarioRepository.save(usuarioEntity);
 	}
-
-	public void insertNovoUsuario(UsuarioDTO usuario) {
+	public void inserirNovoUsuario(UsuarioDTO usuario) {
 		UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
 		usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
 		usuarioEntity.setSituacao(TipoSituacaoUsuario.PENDENTE);
 		usuarioEntity.setId(null);
-
 		usuarioRepository.save(usuarioEntity);
-
+		
 		UsuarioVerificadorEntity verificador = new UsuarioVerificadorEntity();
-
 		verificador.setUsuario(usuarioEntity);
 		verificador.setUuid(UUID.randomUUID());
 		verificador.setDataExpiracao(Instant.now().plusMillis(900000));
-
 		usuarioVerificadorRepository.save(verificador);
-
-		// TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
-
-		String assunto = "<!DOCTYPE html>" + "<html lang='pt-BR'>" + "<head>" + "<meta charset='UTF-8'>"
-				+ "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
-				+ "<title>Ativação de Conta</title>" + "</head>" + "<body>" + "<p>Olá,</p>"
-				+ "<p>Você está recebendo este email porque se cadastrou em nosso serviço. Para ativar sua conta, por favor, clique no link abaixo:</p>"
-				+ "<p><a href='http://localhost:3000/auth/confirmuser?uuid=" + verificador.getUuid()
-				+ "'>Clique aqui para ativar sua conta</a></p>"
-				+ "<p>Se você não se cadastrou em nosso serviço, por favor, ignore este email.</p>" + "<p>Obrigado,<br>"
-				+ letraMais(usuario.getNome()) + "</p>" + "</body>" + "</html>";
-
-		emailService.enviarEmailText(usuario.getEmail(), "Novo Usuario Cadastrado", assunto);
+		
+		//TODO - Enviar um email para verificar a conta
+//		emailService.enviarEmailTexto(usuario.getEmail(), 
+//				"Novo usuário cadastrado", 
+//				"Você está recebendo um email de cadastro o número para validação é " + verificador.getUuid());
+//		
 	}
+
+//	public void insertNovoUsuario(UsuarioDTO usuario) {
+//		UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
+//		usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
+//		usuarioEntity.setSituacao(TipoSituacaoUsuario.PENDENTE);
+//		usuarioEntity.setId(null);
+//
+//		usuarioRepository.save(usuarioEntity);
+//
+//		UsuarioVerificadorEntity verificador = new UsuarioVerificadorEntity();
+//
+//		verificador.setUsuario(usuarioEntity);
+//		verificador.setUuid(UUID.randomUUID());
+//		verificador.setDataExpiracao(Instant.now().plusMillis(900000));
+//
+//		usuarioVerificadorRepository.save(verificador);
+//
+//		// TODO deixar a url mais dinamica para trocar entre producao e desenvolvimento
+//
+//		String assunto = "<!DOCTYPE html>" + "<html lang='pt-BR'>" + "<head>" + "<meta charset='UTF-8'>"
+//				+ "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
+//				+ "<title>Ativação de Conta</title>" + "</head>" + "<body>" + "<p>Olá,</p>"
+//				+ "<p>Você está recebendo este email porque se cadastrou em nosso serviço. Para ativar sua conta, por favor, clique no link abaixo:</p>"
+//				+ "<p><a href='http://localhost:3000/auth/confirmuser?uuid=" + verificador.getUuid()
+//				+ "'>Clique aqui para ativar sua conta</a></p>"
+//				+ "<p>Se você não se cadastrou em nosso serviço, por favor, ignore este email.</p>" + "<p>Obrigado,<br>"
+//				+ letraMais(usuario.getNome()) + "</p>" + "</body>" + "</html>";
+//
+//		emailService.enviarEmailText(usuario.getEmail(), "Novo Usuario Cadastrado", assunto);
+//	}
 
 	public String verificarCadastro(String uuid) {
 

@@ -31,9 +31,9 @@ public class AuthController {
 		return ResponseEntity.ok(authService.login(authDto));
 	}
 
-	@PostMapping(value = "/signup")
-	public void inserirNovoUsuario(@RequestBody UsuarioDTO novoUsuario) {
-		usuarioService.insertNovoUsuario(novoUsuario);
+	@PostMapping(value = "/novoUsuario")
+	public void inserirNovoUsuario(@RequestBody UsuarioDTO novoUsuario){
+		usuarioService.inserirNovoUsuario(novoUsuario);
 	}
 
 	@GetMapping(value = "/verificarCadastro/{uuid}")
