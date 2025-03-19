@@ -1,16 +1,17 @@
 package br.com.napoleao.projeto.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.BeanUtils;
 
-import br.com.napoleao.projeto.dto.ReuniaoDTO;
+import br.com.napoleao.projeto.dto.Reuniao2DTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +33,12 @@ public class ReuniaoEntity {
 	private String descricao;
 
 	@Column(name = "data_reuniao", nullable = false)
-	private Date dataReuniao;
+	private LocalDateTime dataReuniao;
+	
+	@Transient
+	private String data;
 
-	public ReuniaoEntity(ReuniaoDTO reuniao) {
+	public ReuniaoEntity(Reuniao2DTO reuniao) {
 		BeanUtils.copyProperties(reuniao, this);
 	}
 

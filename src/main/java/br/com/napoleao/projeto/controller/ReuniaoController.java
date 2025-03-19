@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.napoleao.projeto.dto.Reuniao2DTO;
-import br.com.napoleao.projeto.dto.ReuniaoDTO;
 import br.com.napoleao.projeto.service.ReuniaoService;
 
 @RestController
@@ -26,26 +25,33 @@ public class ReuniaoController {
 
 	@Autowired
 	private ReuniaoService reuniaoService;
-	
+
 	@GetMapping
-	public List<ReuniaoDTO> ListAll(){
+	public List<Reuniao2DTO> ListAll() {
 		return reuniaoService.listAll();
 	}
-	
+
 	@PostMapping
-	public void insert(@RequestBody Reuniao2DTO reuniaoDTO) throws ParseException {
-		reuniaoService.insert(reuniaoDTO);
+	public ResponseEntity<String> insert(@RequestBody Reuniao2DTO reuniaoDTO) throws ParseException {
+		try {
+			reuniaoService.insert(reuniaoDTO);
+			return ResponseEntity.ok("Reunião cadastrada com sucesso!");
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().body(e.getMessage()); // Retorna erro 400 com a mensagem
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body("Erro ao cadastrar reunião."); // Erro genérico
+		}
 	}
-	
+
 	@PutMapping
-	public ReuniaoDTO update(@RequestBody ReuniaoDTO reuniaoDTO) {
+	public Reuniao2DTO update(@RequestBody Reuniao2DTO reuniaoDTO) {
 		return reuniaoService.update(reuniaoDTO);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
 		reuniaoService.delete(id);
 		return ResponseEntity.ok().build();
 	}
-	
+
 }

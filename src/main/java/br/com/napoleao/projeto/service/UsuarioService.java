@@ -37,7 +37,7 @@ public class UsuarioService {
 
 	public void insert(UsuarioDTO usuario) {
 		UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
-		if(usuarioEntity.getSituacao().equals(null)) {
+		if(usuarioEntity.getSituacao() == null) {
 			usuarioEntity.setSituacao(TipoSituacaoUsuario.PENDENTE);
 		}
 		usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));

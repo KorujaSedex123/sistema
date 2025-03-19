@@ -1,8 +1,7 @@
 package br.com.napoleao.projeto.service;
 
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,27 +18,25 @@ public class ReuniaoService {
 	@Autowired
 	private ReuniaoRepository reuniaoRepository;
 
-	public List<ReuniaoDTO> listAll() {
+	public List<Reuniao2DTO> listAll() {
 		List<ReuniaoEntity> perfis = reuniaoRepository.findAll();
-		return perfis.stream().map(ReuniaoDTO::new).toList();
+		return perfis.stream().map(Reuniao2DTO::new).toList();
 	}
 
 	public void insert(Reuniao2DTO reuniaoDTO) throws ParseException {
-		ReuniaoDTO reuniao = new ReuniaoDTO();
-		
-		
-		reuniao.setDescricao(reuniaoDTO.getDescricao());
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-		Date data = new java.sql.Date(format.parse(reuniaoDTO.getDataReuniao()).getTime());
-	
-		reuniao.setDataReuniao(data);
-		ReuniaoEntity reuniaoEntity = new ReuniaoEntity(reuniao);
+
+		reuniaoDTO.converterDataParaLocalDateTime();
+		if (reuniaoDTO.getDataReuniao() == null || reuniaoDTO.getDataReuniao().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("Reunião deve ser marcada em uma data valida.");
+        }
+
+		ReuniaoEntity reuniaoEntity = new ReuniaoEntity(reuniaoDTO);
 		reuniaoRepository.save(reuniaoEntity);
 	}
 
-	public ReuniaoDTO update(ReuniaoDTO reuniaoDTO) {
+	public Reuniao2DTO update(Reuniao2DTO reuniaoDTO) {
 		ReuniaoEntity reuniaoEntity = new ReuniaoEntity(reuniaoDTO);
-		return new ReuniaoDTO(reuniaoRepository.save(reuniaoEntity));
+		return new Reuniao2DTO(reuniaoRepository.save(reuniaoEntity));
 	}
 
 	public void delete(Long id) {
