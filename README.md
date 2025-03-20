@@ -11,9 +11,7 @@ usuários agendem,  visualizem e gerenciem reuniões de forma eficiente.
 - **PostgreSQL** – Banco de dados relacional
 - **Lombok** – Redução de boilerplate no código
 - **JWT** – Autenticação via token (se aplicável)
-
-🚀 Instalação e Execução
-
+  
 ## Pré-requisitos
 - Java 17 ou superior
 - Maven instalado
